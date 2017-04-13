@@ -1,0 +1,15 @@
+#--------------------------------------------------------------
+# Network
+#--------------------------------------------------------------
+
+name = ""
+env_name = ""
+domain = ""
+vpc_cidr = ""
+region = ""
+environment = ""
+customer_gateway_ip = ""
+private_subnets = []
+private_subnet_names = []
+azs = []
+tunnel_address = []

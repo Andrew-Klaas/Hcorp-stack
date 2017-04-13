@@ -1,0 +1,88 @@
+{
+  "variables": {
+    "aws_access_key":  "",
+    "aws_secret_key":  "",
+    "us_east_1_ami":   "ami-b63769a1",
+    "name":            "ak-redhat",
+    "us_east_1_name":  "aws-us-east-1-redhat",
+    "ssh_username":    "ec2-user",
+    "scripts_dir":     "scripts/redhat",
+    "config_dir":      "config",
+    "dns_listen_addr": "127.0.0.1",
+    "username":        ""
+  },
+  "builders": [
+    {
+      "name": "{{ user `name`}}-nomad",
+      "type": "amazon-ebs",
+      "region": "us-east-1",
+      "access_key":      "{{user `aws_access_key`}}",
+      "secret_key":      "{{user `aws_secret_key`}}",
+      "source_ami": "{{user `us_east_1_ami`}}",
+      "instance_type": "t2.micro",
+      "ssh_username": "ec2-user",
+      "ami_name": "{{user `us_east_1_name`}}-nomad-{{timestamp}}"
+    },
+    {
+      "name": "{{ user `name`}}-vault",
+      "type": "amazon-ebs",
+      "region": "us-east-1",
+      "access_key":      "{{user `aws_access_key`}}",
+      "secret_key":      "{{user `aws_secret_key`}}",
+      "source_ami": "{{user `us_east_1_ami`}}",
+      "instance_type": "t2.micro",
+      "ssh_username": "ec2-user",
+      "ami_name": "{{user `us_east_1_name`}}-vault-{{timestamp}}"
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "../../scripts/redhat/base.sh",
+        "../../scripts/redhat/consul.sh",
+        "../../scripts/redhat/consul-template.sh",
+        "../../scripts/redhat/consul-ui.sh"
+      ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "../../scripts/redhat/nomad.sh"
+      ],
+      "only":   ["{{ user `name`}}-nomad"]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "../../scripts/redhat/vault.sh"
+      ],
+      "only":   ["{{ user `name`}}-vault"]
+    },
+    {
+      "type": "shell",
+        "execute_command": "echo 'packer' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+        "inline": [
+           "sudo useradd -m {{user `username`}} -s /bin/bash",
+           "sudo mkdir -p /home/{{user `username`}}/.ssh/",
+           "sudo echo \"{{user `username`}} ALL=(root) NOPASSWD: ALL\" >> /etc/sudoers.d/{{user `username`}}"
+            ]
+    },
+    {
+      "type": "file",
+        "source": "/Users/{{user `username`}}/.ssh/id_rsa.pub",
+        "destination": "/tmp/authorized_keys"
+    },
+    {
+      "type": "shell",
+        "execute_command": "echo 'packer' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+        "inline": [
+           "sudo mv /tmp/authorized_keys /home/{{user `username`}}/.ssh/authorized_keys",
+           "sudo chown -R {{user `username`}}:{{user `username`}} /home/{{user `username`}}/.ssh/",
+           "sudo chmod 700 /home/{{user `username`}}/.ssh/",
+           "sudo chmod 600 /home/{{user `username`}}/.ssh/authorized_keys"
+            ]
+    }
+  ]
+}
