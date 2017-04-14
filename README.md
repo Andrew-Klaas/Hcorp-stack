@@ -1,5 +1,5 @@
 Playground for learning hashicorp tools.
-Spins up: 3 Consul Servers, 3 Nomad Servers, 3 Nomad Clients, 1 Vault Server
+Spins up: 3 Consul Servers, 3 Nomad Servers, 3 Nomad Clients, 1 Vault Server, and a MySQL database
 
 all nodes have consul installed
 
