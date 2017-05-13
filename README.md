@@ -67,5 +67,18 @@ take a look at
 	https://github.com/Andrew-Klaas/Hcorp-stack/blob/master/terraform/modules/aws/compute/scripts/setup_mysql_vault.sh
 That won't work right out of the box, you will need to change the username and password depending on what you used in your secrets.tfvars file
 
+# Set up
+
+0. Note: you will need to add your aws_secret and access keys either via secrets file or env vars or cli
+
+1. edit your "username" in terraform.tfvars
+
+2. 
+	$ terraform apply -var-file=secrets.tfvars 
+	
+3.
+	
+
+
 
 

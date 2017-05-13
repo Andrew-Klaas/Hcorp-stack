@@ -14,7 +14,7 @@ fi
 export ROOT_TOKEN=$(consul kv get service/vault/root-token)
 export NOMAD_TOKEN=$(consul kv get service/vault/nomad-token)
 vault auth $ROOT_TOKEN
-vault write mysql/config/connection connection_url="user:passw0rd@tcp($MYSQL_IP:3306)/"
+vault write mysql/config/connection connection_url="user:password@tcp($MYSQL_IP:3306)/"
 vault write mysql/roles/app sql="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT ALL PRIVILEGES ON app.* TO '{{name}}'@'%';"
 vault read mysql/creds/app
 

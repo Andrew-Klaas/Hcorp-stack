@@ -80,8 +80,9 @@ if [ ! $(cget nomad-token) ]; then
   vault policy-write nomad-server ~/policy/nomad-server-policy.hcl
   export NOMAD_TOKEN=$(vault token-create -policy nomad-server | grep 'token ' | awk '{print $2}')
   curl -fX PUT 127.0.0.1:8500/v1/kv/service/vault/nomad-token -d $NOMAD_TOKEN
+  sudo echo $NOMAD_TOKEN > /tmp/test5
 fi
-
+sudo echo "test4" > /tmp/test6
 #instructions
 
 

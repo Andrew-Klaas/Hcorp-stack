@@ -23,7 +23,7 @@ data "aws_ami" "redhat" {
 
 resource "aws_instance" "nomad-server" {
     ami = "${data.aws_ami.redhat.id}"
-    instance_type = "t2.micro"
+    instance_type = "t2.large"
     count = "${var.nomad_server_count}"
     subnet_id = "${element(split(",", var.public_subnet_ids), 0)}"
     vpc_security_group_ids = ["${aws_security_group.sg.id}"]
@@ -85,7 +85,7 @@ resource "aws_instance" "nomad-server" {
 
 resource "aws_instance" "nomad-client" {
     ami = "${data.aws_ami.redhat.id}"
-    instance_type = "t2.micro"
+    instance_type = "t2.large"
     count = "${var.nomad_server_count}"
     subnet_id = "${element(split(",", var.public_subnet_ids), 0)}"
     vpc_security_group_ids = ["${aws_security_group.sg.id}"]
@@ -258,6 +258,13 @@ resource "aws_security_group" "sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+
+  ingress {
+    from_port   = 4040
+    to_port     = 4040
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 output "nomad_server_addresses" {
