@@ -21,7 +21,7 @@ data "aws_ami" "redhat" {
 
 resource "aws_instance" "vault-server" {
     ami = "${data.aws_ami.redhat.id}"
-    instance_type = "t2.medium"
+    instance_type = "t2.micro"
     count = "${var.vault_server_count}"
     subnet_id = "${element(split(",", var.public_subnet_ids), 0)}"
     vpc_security_group_ids = ["${aws_security_group.sg.id}"]

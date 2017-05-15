@@ -20,7 +20,6 @@ azs = ["us-east-1a", "us-east-1b"]
 
 #tunnel_address = [""]
 
-user = "andrewklaas"
 key_path = "~/.ssh/id_rsa"
 private_key = "${file("~/.ssh/id_rsa")}"
 

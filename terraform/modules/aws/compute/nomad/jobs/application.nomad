@@ -18,7 +18,7 @@ job "app" {
 
       env {
         VAULT_ADDR = "http://vault.service.consul:8200"
-        HASHIAPP_DB_HOST = "10.103.2.115:3306"
+        APP_DB_HOST = "10.103.2.115:3306"
       }
 
       vault {
