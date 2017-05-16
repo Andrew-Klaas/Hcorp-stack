@@ -51,22 +51,24 @@ configuration scripts are located at
     /packer/scripts/redhat
 
 
-# Set up
+# Nomad Application set up
 This repo will setup a full functionaing nomad cluster, consul cluster, vault instance, and mysql database
 
-0. Get in the proper directory
+Get in the proper directory
 	
 	$ cd Hcorp-stack/terraform/providers/aws/us_east_1_dev/
 
-1. setup a secrets.tfvars with the following vars (You need to create this file, with these vars)
+Setup a secrets.tfvars with the following vars (You need to create this file, with these vars)
 	
 	user = "andrewklaas"
+	# Your aws access creds
 	aws_access_key=""
 	aws_secret_key=""
+	# your mysql datab ase username password
 	db_username="your_user"
 	db_password="your_password"
 
-2. Launch Terraform
+Launch Terraform
     
     $ terraform plan -var-file=secrets.tfvar   
 	$ terraform apply -var-file=secrets.tfvars 
@@ -87,13 +89,12 @@ Your outputs should looklike this
 	]
 	primary_vault = ssh://ec2-34-224-57-107.compute-1.amazonaws.com  
 
-3. SSH into primary_vault, and then setup vault and mysql
-	# use the url of the database and this pre-created script to configure vault for creating dynamic 
-	# usernames and password, you will need to pass the db_endpoint and your db_username and db_password
+SSH into primary_vault so we can setup vault's mysql backend. Use the url of the database (from the terraform output above) and this pre-created script to configure vault for creating dynamic usernames and password, you will need to pass the db_endpoint and your db_username and db_password
 	
 	[andrewklaas@ip-10-103-9-162 tmp]$ /tmp/setup_mysql_vault.sh akproject-mysql.caaqf9qz0wbw.us-east-1.rds.amazonaws.com akuser akpassword
 
-   the output should look like this (write down your mysql IP)
+the output should look like this (write down your mysql IP)
+   	
    	Success! Data written to: mysql/roles/app
 	Key            	Value
 	---            	-----
@@ -107,13 +108,13 @@ Your outputs should looklike this
 	10.103.2.220
 	nomad-token
 
-4. create the "app" database in the mysql rds instance
+Create the "app" database in the mysql rds instance
 	
 	$ mysql -h  $db_ip -u akuser -p
     $ MySQL [(none)]> create database app;
 
 
-5. now SSH into the first nomad server above from step 2. Make sure the cluster is running correctly
+Now SSH into the first nomad server above from step 2. Make sure the cluster is running correctly
 	
 	[andrewklaas@ip-10-103-9-106 ~]$ nomad node-status
 	ID        DC   Name                           Class   Drain  Status
@@ -126,38 +127,55 @@ Your outputs should looklike this
 	ip-10-103-8-166.ec2.internal.global  10.103.8.166  4648  alive   true    2         0.5.5rc1  dc1         global
 	ip-10-103-9-106.ec2.internal.global  10.103.9.106  4648  alive   false   2         0.5.5rc1  dc1         global
 
-6. Now lets start some jobs, lets run redis (docker)
+Now lets start some jobs, lets run redis (docker)
 	
 	$ cd jobs/
 	$ nomad run redis.nomad
     $ nomad status redis
     make sure its running, there should be 3 redis tasks.
 
-7. Check out the consul ui, Open the url from step to for "consul_ui" in your browser, you should see the "cache-redis" service registered along with consul/nomad/vault
+Check out the consul ui, Open the url from step to for "consul_ui" in your browser (look back at terraform output for the url), you should see the "cache-redis" service registered along with consul/nomad/vault
 
-8. run the fabio load balancer (go binary -> exec driver)
+Run the fabio load balancer (go binary -> exec driver)
    
-   $ nomad run fabio.nomad
+    $ nomad run fabio.nomad
 
-Now check the fabio UI -> open want of the nomad CLIENT IP addresses in your browser with port 9998
+Now check the fabio UI -> open one of the nomad CLIENT IP addresses in your browser with port 9998
 ec2-52-201-213-3.compute-1.amazonaws.com:9998, you should see routes to redis if you ran that job
 
-9. Now lets see some vault dynamic secrets. edit application.nomad and change
-
+Now lets see some vault dynamic secrets. edit application.nomad and change
+	
+	# file: application.nomad
 	# Change this to your database endoints IP address
 	APP_DB_HOST = "10.103.2.115:3306"
 
-	# Next run the job
+go back to command line!
+	
 	$ nomad run application.nomad
 	#This pulls down a go boinary from aws S3 bucket and runs with the exec driver
 
-10. Check Consul UI and Fabio UI to see that the app started running
+Check Consul UI and Fabio UI to see that the app started running
 
-11. Check the nomad jobs logs to see the app pulling dynamic usernames and password
+Check the nomad jobs logs to see the app pulling dynamic usernames and password
 
 	$ nomad status fabio
-	$ nomad logs -stderr $fabio_allocation_id
+	# check the logs of one of the allocations
+	$ nomad logs -stderr c9e6a789
+	2017/05/15 11:37:47 Starting app...
+	2017/05/15 11:37:47 Getting database credentials...
+	2017/05/15 11:37:47 dynamic_user:  app-toke-c33778a  dynamic_password:  981ac1be-5556-f0a4-359b-c10ca14a3521
+	2017/05/15 11:37:47 Initializing database connection pool...
+	2017/05/15 11:37:47 dbAddr  10.103.3.129:3306
+	2017/05/15 11:37:47 dsn  app-toke-c33778a:981ac1be-5556-f0a4-359b-c10ca14a3521@tcp(10.103.3.129:3306)/app
+	2017/05/15 11:37:47 HTTP service listening on 10.103.10.155:43422
+	2017/05/15 11:37:47 Renewing credentials: mysql/creds/app/5d2272b7-f89f-0d4f-af02-5f2a1145d6db
 
+
+#Misc info:
+For demo purposes, only destroy the nomad resources in terraform, then you dont have all the manual database setups
+
+	$ terraform destroy -target=module.compute.module.nomad.aws_instance.nomad-server -var-file=secrets.tfvars
+	$ terraform destroy -target=module.compute.module.nomad.aws_instance.nomad-client -var-file=secrets.tfvars
 
 # Nomad usage
 Login to one of the nomad servers (see your terraform output).
@@ -167,10 +185,4 @@ Login to one of the nomad servers (see your terraform output).
 	nomad node-status
 	nomad run fabio.nomad
 	nomad run application.nomad
-
-#Misc info:
-For demo purposes, only destroy the nomad resources in terraform, then you dont have all the manual database setups
-
-	$ terraform destroy -target=module.compute.module.nomad.aws_instance.nomad-server -var-file=secrets.tfvars
-	$ terraform destroy -target=module.compute.module.nomad.aws_instance.nomad-client -var-file=secrets.tfvars
 
