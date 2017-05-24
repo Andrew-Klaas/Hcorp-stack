@@ -3,7 +3,7 @@
 set -e
 
 echo "Fetching Consul..."
-CONSUL=0.7.5
+CONSUL=0.8.3
 cd /tmp
 wget https://releases.hashicorp.com/consul/${CONSUL}/consul_${CONSUL}_linux_amd64.zip \
     --quiet \

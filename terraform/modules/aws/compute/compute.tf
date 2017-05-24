@@ -8,6 +8,7 @@ variable "key_path" {}
 variable "private_key" {}
 
 variable "consul_server_count" { }
+variable "vault_server_count"  { }
 variable "nomad_server_count"  { }
 variable "nomad_client_count"  { }
 variable "vault_server_count"  { }
@@ -24,7 +25,7 @@ module "vault" {
   private_subnet_ids = "${var.private_subnet_ids}"
   public_subnet_ids = "${var.public_subnet_ids}"
   vpc_id = "${var.vpc_id}"
-  vault_server_count = 1
+  vault_server_count = "${var.vault_server_count}"
   consul_server_count = "${var.consul_server_count}"
   primary_consul = "${module.consul.primary_consul}" 
 }
@@ -72,6 +73,10 @@ output "nomad_server_addresses" {
 
 output "nomad_client_addresses" {
   value = "${module.nomad.nomad_client_addresses}"
+}
+
+output "vault_server_addresses" {
+  value = "${module.vault.vault_server_addresses}"
 }
 
 output "primary_vault" {

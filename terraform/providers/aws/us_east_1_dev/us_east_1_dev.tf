@@ -19,6 +19,7 @@ variable "key_path" {}
 variable "private_key" {}
 
 variable "consul_server_count" { default = "3" }
+variable "vault_server_count"  { default = "3" }
 variable "nomad_server_count"  { default = "3" }
 variable "nomad_client_count"  { default = "3" }
 variable "vault_server_count"  { default = "1" }
@@ -50,6 +51,12 @@ variable "db_backup_window" {}
 ##########
 # devaws #
 ##########
+
+terraform {
+  backend "atlas" {
+    name = "aklaas/Hcorp-stack"
+  }
+}
 
 provider "aws" {
   region = "${var.region}"
@@ -151,6 +158,10 @@ output "nomad_client_addresses" {
 
 output "primary_vault" {
   value = "${module.compute.primary_vault}"
+}
+
+output vault_server_addressed" {
+  value = "${module.compute.vault_server_addressed}"
 }
 
 output "db_endpoint" { 

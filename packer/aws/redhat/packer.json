@@ -1,37 +1,43 @@
 {
   "variables": {
-    "aws_access_key":  "",
-    "aws_secret_key":  "",
-    "us_east_1_ami":   "ami-b63769a1",
+    "aws_access_key": "{{ env `AWS_ACCESS_KEY_ID` }}",
+    "aws_access_key": "{{ env `AWS_SECRET_ACCESS_KEY` }}",
+    "aws_region": "{{ env `AWS_DEFAULT_REGION` }}",
+    "us_east_1_ami":   "ami-2cade64c",
     "name":            "ak-redhat",
     "us_east_1_name":  "aws-us-east-1-redhat",
     "ssh_username":    "ec2-user",
     "scripts_dir":     "scripts/redhat",
     "config_dir":      "config",
     "dns_listen_addr": "127.0.0.1",
-    "username":        ""
+    "username":        "{{ env `USER` }}"
   },
   "builders": [
     {
       "name": "{{ user `name`}}-nomad",
       "type": "amazon-ebs",
-      "region": "us-east-1",
+      "region": "{{user `aws_region`}}",
       "access_key":      "{{user `aws_access_key`}}",
       "secret_key":      "{{user `aws_secret_key`}}",
       "source_ami": "{{user `us_east_1_ami`}}",
+      "ssh_timeout": "5m",
       "instance_type": "t2.micro",
       "ssh_username": "ec2-user",
+      "ssh_pty": true,
+      "associate_public_ip_address": true,
       "ami_name": "{{user `us_east_1_name`}}-nomad-{{timestamp}}"
     },
     {
       "name": "{{ user `name`}}-vault",
       "type": "amazon-ebs",
-      "region": "us-east-1",
+      "region": "{{user `aws_region`}}",
       "access_key":      "{{user `aws_access_key`}}",
       "secret_key":      "{{user `aws_secret_key`}}",
       "source_ami": "{{user `us_east_1_ami`}}",
+      "ssh_timeout": "5m",
       "instance_type": "t2.micro",
       "ssh_username": "ec2-user",
+      "ssh_pty": true,
       "ami_name": "{{user `us_east_1_name`}}-vault-{{timestamp}}"
     }
   ],

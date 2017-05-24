@@ -3,7 +3,7 @@
 set -e
 
 echo "Fetching Consul Template..."
-VERSION=0.15.0
+VERSION=0.18.2
 cd /tmp
 wget https://releases.hashicorp.com/consul-template/${VERSION}/consul-template_${VERSION}_linux_amd64.zip \
     --quiet \
