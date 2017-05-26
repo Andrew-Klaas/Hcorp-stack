@@ -11,7 +11,6 @@ variable "consul_server_count" { }
 variable "vault_server_count"  { }
 variable "nomad_server_count"  { }
 variable "nomad_client_count"  { }
-variable "vault_server_count"  { }
 variable "private_subnet_ids"  { }
 variable "public_subnet_ids"   { }
 

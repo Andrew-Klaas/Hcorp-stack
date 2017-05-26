@@ -83,5 +83,6 @@ resource "aws_db_instance" "master" {
 }
 
 output "endpoint" { value = "${aws_db_instance.master.endpoint}" }
+output "address"  { value = "${aws_db_instance.master.address} "}
 output "username" { value = "${var.username}" }
 output "password" { value = "${var.password}" }

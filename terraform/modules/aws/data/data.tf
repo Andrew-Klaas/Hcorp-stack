@@ -53,4 +53,5 @@ module "rds_mysql" {
 output "db_endpoint" { value = "${module.rds_mysql.endpoint}" }
 output "db_username" { value = "${module.rds_mysql.username}" }
 output "db_password" { value = "${module.rds_mysql.password}" }
+output "db_address" { value = "${module.rds_mysql.address}"}
 

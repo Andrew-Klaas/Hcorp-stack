@@ -22,7 +22,6 @@ variable "consul_server_count" { default = "3" }
 variable "vault_server_count"  { default = "3" }
 variable "nomad_server_count"  { default = "3" }
 variable "nomad_client_count"  { default = "3" }
-variable "vault_server_count"  { default = "1" }
 variable "aws_access_key"      { }
 variable "aws_secret_key"      { }
 
@@ -160,11 +159,13 @@ output "primary_vault" {
   value = "${module.compute.primary_vault}"
 }
 
-output vault_server_addressed" {
-  value = "${module.compute.vault_server_addressed}"
+output "vault_server_addresses" {
+  value = "${module.compute.vault_server_addresses}"
 }
 
 output "db_endpoint" { 
   value = "${module.data.db_endpoint}" 
 }
-
+output "db_address" { 
+  value = "${module.data.db_address}" 
+}

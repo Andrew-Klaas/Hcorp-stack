@@ -3,9 +3,6 @@ set -e
 set -x
 set -v
 
-
-sudo yum install -y mysql
-
 sleep 60s
 
 echo "starting vault install"
@@ -49,7 +46,9 @@ vault unseal $(cget unseal-key-1)
 vault unseal $(cget unseal-key-2)
 vault unseal $(cget unseal-key-3)
 
-sleep 10s
+sudo echo "test4" > /tmp/test4
+
+sleep 25s
 
 echo "Vault setup complete."
 
@@ -66,23 +65,24 @@ EOF
   exit 0
 }
 
-sleep 10s
 
-#Create Nomad Vault Token for mysql
-export ROOT_TOKEN=$(consul kv get service/vault/root-token)
-vault auth $ROOT_TOKEN
-
-#vault audit-enable file file_path=/var/log/vault_audit.log
+if vault status | grep active > /dev/null; then
+  # auth with root token
+  #Create Nomad Vault Token for mysql
+  export ROOT_TOKEN=$(consul kv get service/vault/root-token)
+  vault auth $ROOT_TOKEN
+  #vault audit-enable file file_path=/var/log/vault_audit.log
+fi
 
 if [ ! $(cget nomad-token) ]; then
-  sudo echo "test4" > /tmp/test4
+  sudo echo "test5" > /tmp/test5
   vault mount mysql
   vault policy-write nomad-server ~/policy/nomad-server-policy.hcl
   export NOMAD_TOKEN=$(vault token-create -policy nomad-server | grep 'token ' | awk '{print $2}')
   curl -fX PUT 127.0.0.1:8500/v1/kv/service/vault/nomad-token -d $NOMAD_TOKEN
   sudo echo $NOMAD_TOKEN > /tmp/test5
 fi
-sudo echo "test4" > /tmp/test6
+sudo echo "test6" > /tmp/test6
 #instructions
 
 

@@ -6,7 +6,7 @@ name = "akproject"
 env_name = "AKdevaws"
 domain = "AKdevaws.ak.com"
 vpc_cidr = "10.103.0.0/20"
-region = "us-east-1"
+region = "us-west-1"
 environment = "DEV"
 customer_gateway_ip = "167.115.8.25"
 
@@ -16,12 +16,12 @@ private_subnet_names = ["AKdevaws-A", "AKdevaws-B"]
 public_subnets = ["10.103.8.0/22"]
 public_subnet_names = ["AKdevaws-C"]
 
-azs = ["us-east-1a", "us-east-1b"]
+azs = ["us-west-1b", "us-west-1c"]
 
 #tunnel_address = [""]
 
 key_path = "~/.ssh/id_rsa"
-private_key = "${file("~/.ssh/id_rsa")}"
+#private_key = ""
 
 db_name           = "AkApp"
 db_engine         = "mysql"

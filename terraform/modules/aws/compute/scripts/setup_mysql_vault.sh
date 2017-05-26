@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-
+sudo yum install -y mysql
 
 #step 1:
 if [ -z "$1" ]; then
@@ -23,7 +23,9 @@ echo $MYSQL_IP
 echo "nomad-token"
 echo $NOMAD_TOKEN
 
-
+mysql -h $1 -u $2 -p '$3' dbname<<EOFMYSQL
+create database app;
+EOFMYSQL
 
 # YOU HAVE TO DO THIS FIRST
 #step 2:

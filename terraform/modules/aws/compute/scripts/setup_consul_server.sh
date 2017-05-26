@@ -21,8 +21,7 @@ CONSUL_FLAGS="\
 -join=${CONSUL_JOIN} \
 -data-dir=/opt/consul/data \
 -client 0.0.0.0 -ui \
--advertise=${INSTANCE_PRIVATE_IP} \
--ui-dir=/opt/consul-ui"
+-advertise=${INSTANCE_PRIVATE_IP}"
 EOF
 
 # setup consul UI specific iptables rules
@@ -40,6 +39,12 @@ CONSUL_FLAGS="\
 -data-dir=/opt/consul/data"
 EOF
 fi
+
+sudo bash -c "cat >/etc/systemd/system/consul.d/consul.json" << EOF
+{
+        "acl_enforce_version_8": false
+}
+EOF
 
 sudo chown root:root /etc/default/consul
 sudo chmod 0644 /etc/default/consul

@@ -1,20 +1,23 @@
 {
+
   "variables": {
     "aws_access_key": "{{ env `AWS_ACCESS_KEY_ID` }}",
     "aws_access_key": "{{ env `AWS_SECRET_ACCESS_KEY` }}",
     "aws_region": "{{ env `AWS_DEFAULT_REGION` }}",
     "us_east_1_ami":   "ami-2cade64c",
-    "name":            "ak-redhat",
+    "image_name":            "ak-redhat",
     "us_east_1_name":  "aws-us-east-1-redhat",
     "ssh_username":    "ec2-user",
     "scripts_dir":     "scripts/redhat",
     "config_dir":      "config",
     "dns_listen_addr": "127.0.0.1",
-    "username":        "{{ env `USER` }}"
+    "username":        "{{ env `USER` }}",
+    "vault_enterprise_url": "{{env `VAULT_ENT_URL`}}",
+    "consul_enterprise_url": "{{env `CONSUL_ENT_URL`}}"
   },
   "builders": [
     {
-      "name": "{{ user `name`}}-nomad",
+      "name": "ak-redhat-nomad",
       "type": "amazon-ebs",
       "region": "{{user `aws_region`}}",
       "access_key":      "{{user `aws_access_key`}}",
@@ -28,7 +31,7 @@
       "ami_name": "{{user `us_east_1_name`}}-nomad-{{timestamp}}"
     },
     {
-      "name": "{{ user `name`}}-vault",
+      "name": "ak-redhat-vault",
       "type": "amazon-ebs",
       "region": "{{user `aws_region`}}",
       "access_key":      "{{user `aws_access_key`}}",
@@ -46,25 +49,25 @@
     {
       "type": "shell",
       "scripts": [
-        "../../scripts/redhat/base.sh",
-        "../../scripts/redhat/consul.sh",
-        "../../scripts/redhat/consul-template.sh",
-        "../../scripts/redhat/consul-ui.sh"
+        "./scripts/redhat/base.sh",
+        "./scripts/redhat/consul.sh",
+        "./scripts/redhat/consul-template.sh",
+        "./scripts/redhat/consul-ui.sh"
       ]
     },
     {
       "type": "shell",
       "scripts": [
-        "../../scripts/redhat/nomad.sh"
+        "./scripts/redhat/nomad.sh"
       ],
-      "only":   ["{{ user `name`}}-nomad"]
+      "only":   ["ak-redhat-nomad"]
     },
     {
       "type": "shell",
       "scripts": [
-        "../../scripts/redhat/vault.sh"
+        "./scripts/redhat/vault.sh {{ user `vault_enterprise_url`}}"
       ],
-      "only":   ["{{ user `name`}}-vault"]
+      "only":   ["ak-redhat-vault"]
     },
     {
       "type": "shell",

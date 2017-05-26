@@ -30,7 +30,7 @@ resource "aws_instance" "consul-server" {
     }
     connection {
         user = "${var.user}"
-        private_key = "${file("~/.ssh/id_rsa")}"
+        private_key = "${var.private_key}"
     }
 
     provisioner "remote-exec" {
