@@ -13,8 +13,6 @@ customer_gateway_ip = "167.115.8.25"
 private_subnets = ["10.103.0.0/22", "10.103.4.0/22"]
 private_subnet_names = ["AKdevaws-A", "AKdevaws-B"]
 
-nomad_client_count = 5
-
 public_subnets = ["10.103.8.0/22"]
 public_subnet_names = ["AKdevaws-C"]
 
@@ -41,5 +39,12 @@ db_storage_encrypted       = "false"
 db_maintenance_window      = "mon:04:03-mon:04:33"
 db_backup_retention_period = "7"
 db_backup_window           = "10:19-10:49"
+
+
+
+consul_server_count = 3
+vault_server_count = 3
+nomad_server_count = 3
+nomad_client_count = 5
 
 

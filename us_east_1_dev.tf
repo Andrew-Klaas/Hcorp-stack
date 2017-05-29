@@ -19,10 +19,10 @@ variable "user" {}
 variable "key_path" {}
 variable "private_key" {}
 
-variable "consul_server_count" { default = "3" }
-variable "vault_server_count"  { default = "3" }
-variable "nomad_server_count"  { default = "3" }
-variable "nomad_client_count"  { default = "3" }
+variable "consul_server_count" {  }
+variable "vault_server_count"  {  }
+variable "nomad_server_count"  {  }
+variable "nomad_client_count"  {  }
 variable "aws_access_key"      { }
 variable "aws_secret_key"      { }
 
