@@ -105,7 +105,7 @@ module "compute" {
   user                = "${var.user}"
   key_path            = "${var.key_path}"
   private_key         = "${var.private_key}"
-  consul_server_count = 3
+  consul_server_count = "${var.consul_server_count}"
   nomad_server_count  = "${var.nomad_server_count}"
   nomad_client_count  = "${var.nomad_client_count}"
   vault_server_count  = "${var.vault_server_count}"
