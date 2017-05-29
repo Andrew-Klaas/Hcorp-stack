@@ -72,7 +72,7 @@ provider "aws" {
 #}
 
 module "network" {
-  source = "../../../modules/aws/network"
+  source = "terraform/modules/aws/network"
 
   name                = "${var.name}"
   environment         = "${var.environment}"
@@ -91,7 +91,7 @@ module "network" {
 }
 
 module "compute" {
-  source = "../../../modules/aws/compute"
+  source = "terraform/modules/aws/compute"
 
   name               = "${var.name}"
   region             = "${var.region}"
@@ -115,7 +115,7 @@ module "compute" {
 }
 
 module "data" {
-  source = "../../../modules/aws/data"
+  source = "terraform/modules/aws/data"
 
   name               = "${var.name}"
   vpc_id             = "${module.network.vpc_id}"
