@@ -14,7 +14,9 @@ variable "nomad_client_count"  { }
 variable "private_subnet_ids"  { }
 variable "public_subnet_ids"   { }
 
-variable "db_endpoint" { default = "" }
+variable "db_address"  { }
+variable "db_user"     { }
+variable "db_password" { }
 
 module "vault" {
   source = "./vault"
@@ -27,6 +29,11 @@ module "vault" {
   vault_server_count = "${var.vault_server_count}"
   consul_server_count = "${var.consul_server_count}"
   primary_consul = "${module.consul.primary_consul}" 
+
+  db_address = "${var.db_address}"
+  db_user    = "${var.db_user}"
+  db_password = "${var.db_password}"
+
 }
 
 module "consul" {
@@ -39,7 +46,6 @@ module "consul" {
   consul_server_count = "${var.consul_server_count}"
   vpc_id = "${var.vpc_id}"
 
-  db_endpoint = "${var.db_endpoint}"
 }
 
 module "nomad" {

@@ -10,6 +10,10 @@ variable "primary_consul"      { }
 variable "consul_server_count" { }
 variable "vault_server_count"  { }
 
+variable "db_address"          { }
+variable "db_user"             { }
+variable "db_password"         { }
+
 data "aws_ami" "redhat" {
   most_recent = true
   owners = ["self"]
@@ -81,7 +85,8 @@ resource "aws_instance" "vault-server" {
             "sleep 10s",
             "sudo chmod +x /tmp/setup_mysql_vault.sh",
             "sudo chmod +x /tmp/setup_vault.sh",
-            "/tmp/setup_vault.sh &> /tmp/setup.log"
+            "/tmp/setup_vault.sh &> /tmp/setup.log",
+            "/tmp/setup_mysql_vault.sh ${var.db_address} ${var.db_user} ${var.db_password}"
         ]
     }
 }
