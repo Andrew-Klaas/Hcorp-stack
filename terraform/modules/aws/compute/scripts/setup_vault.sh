@@ -48,7 +48,7 @@ vault unseal $(cget unseal-key-3)
 
 sudo echo "test4" > /tmp/test4
 
-sleep 25s
+sleep 10s
 
 echo "Vault setup complete."
 
@@ -72,15 +72,14 @@ if vault status | grep active > /dev/null; then
   export ROOT_TOKEN=$(consul kv get service/vault/root-token)
   vault auth $ROOT_TOKEN
   #vault audit-enable file file_path=/var/log/vault_audit.log
-fi
-
-if [ ! $(cget nomad-token) ]; then
-  sudo echo "test5" > /tmp/test5
-  vault mount mysql
-  vault policy-write nomad-server ~/policy/nomad-server-policy.hcl
-  export NOMAD_TOKEN=$(vault token-create -policy nomad-server | grep 'token ' | awk '{print $2}')
-  curl -fX PUT 127.0.0.1:8500/v1/kv/service/vault/nomad-token -d $NOMAD_TOKEN
-  sudo echo $NOMAD_TOKEN > /tmp/test5
+  if [ ! $(cget nomad-token) ]; then
+    sudo echo "test5" > /tmp/test5
+    vault mount mysql
+    vault policy-write nomad-server ~/policy/nomad-server-policy.hcl
+    export NOMAD_TOKEN=$(vault token-create -policy nomad-server | grep 'token ' | awk '{print $2}')
+    curl -fX PUT 127.0.0.1:8500/v1/kv/service/vault/nomad-token -d $NOMAD_TOKEN
+    sudo echo $NOMAD_TOKEN > /tmp/test5
+  fi
 fi
 sudo echo "test6" > /tmp/test6
 #instructions

@@ -43,8 +43,8 @@ db_backup_window           = "10:19-10:49"
 
 
 consul_server_count = 3
-vault_server_count = 3
-nomad_server_count = 5
-nomad_client_count = 5
+vault_server_count = 1
+nomad_server_count = 3
+nomad_client_count = 3
 
 
