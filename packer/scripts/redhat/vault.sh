@@ -4,14 +4,14 @@ set -e
 
 echo "Fetching Vault..."
 VAULT=0.7.2
-cd /tmp
-wget $1 \
-    --quiet \
-    -O vault.zip
+sudo cd /tmp
+#wget $1 \
+#    --quiet \
+#    -O vault.zip
 
 echo "Installing Vault..."
-unzip -q vault.zip >/dev/null
-chmod +x vault
+sudo unzip -q /tmp/vault.zip >/dev/null
+sudo chmod +x vault
 sudo mv vault /usr/local/bin
 sudo chmod 0755 /usr/local/bin/vault
 sudo chown root:root /usr/local/bin/vault
