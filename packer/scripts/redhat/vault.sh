@@ -55,6 +55,7 @@ After=network-online.target consul.service
 
 [Service]
 EnvironmentFile=-/etc/default/vault
+Environment="VAULT_UI=true"
 Restart=on-failure
 ExecStart=/usr/local/bin/vault server $VAULT_FLAGS -config=/etc/systemd/system/vault.d/config.json
 ExecReload=/bin/kill -HUP $MAINPID
