@@ -57,7 +57,7 @@ module "nomad" {
   public_subnet_ids = "${var.public_subnet_ids}"
   consul_server_count = "${var.consul_server_count}"
   nomad_server_count = "${var.nomad_server_count}"
-  nomad_client_count = "5"
+  nomad_client_count = "${var.nomad_client_count}"
   vpc_id = "${var.vpc_id}"
   primary_consul = "${module.consul.primary_consul}" 
   primary_vault  = "${module.vault.primary_vault}"
