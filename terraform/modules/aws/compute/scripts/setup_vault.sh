@@ -66,6 +66,7 @@ EOF
 }
 
 
+
 if vault status | grep active > /dev/null; then
   # auth with root token
   #Create Nomad Vault Token for mysql
