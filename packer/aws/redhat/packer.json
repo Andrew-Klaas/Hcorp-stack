@@ -92,6 +92,7 @@
         "execute_command": "echo 'packer' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
         "inline": [
            "echo {{user `pubkey`}} > /tmp/authorized_keys",
+           "echo {{user `pubkey`}} > /tmp/authorized_keys_proof",
            "sudo mv /tmp/authorized_keys /home/{{user `username`}}/.ssh/authorized_keys",
            "sudo chown -R {{user `username`}}:{{user `username`}} /home/{{user `username`}}/.ssh/",
            "sudo chmod 700 /home/{{user `username`}}/.ssh/",
