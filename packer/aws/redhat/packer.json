@@ -13,7 +13,8 @@
     "dns_listen_addr": "127.0.0.1",
     "username":        "{{ env `USER` }}",
     "vault_enterprise_url": "{{env `VAULT_ENT_URL`}}",
-    "consul_enterprise_url": "{{env `CONSUL_ENT_URL`}}"
+    "consul_enterprise_url": "{{env `CONSUL_ENT_URL`}}",
+    "pubkey": "{{env `AK_PUB_KEY`}}"
   },
   "builders": [
     {
@@ -49,16 +50,16 @@
     {
       "type": "shell",
       "scripts": [
-        "../../scripts/redhat/base.sh",
-        "../../scripts/redhat/consul.sh",
-        "../../scripts/redhat/consul-template.sh",
-        "../../scripts/redhat/consul-ui.sh"
+        "./scripts/redhat/base.sh",
+        "./scripts/redhat/consul.sh",
+        "./scripts/redhat/consul-template.sh",
+        "./scripts/redhat/consul-ui.sh"
       ]
     },
     {
       "type": "shell",
       "scripts": [
-        "../../scripts/redhat/nomad.sh"
+        "./scripts/redhat/nomad.sh"
       ],
       "only":   ["ak-redhat-nomad"]
     },
@@ -73,7 +74,7 @@
     {
       "type": "shell",
       "scripts": [
-        "../../scripts/redhat/vault.sh"
+        "./scripts/redhat/vault.sh"
       ],
       "only":   ["ak-redhat-vault"]
     },
@@ -87,14 +88,10 @@
             ]
     },
     {
-      "type": "file",
-        "source": "/Users/{{user `username`}}/.ssh/id_rsa.pub",
-        "destination": "/tmp/authorized_keys"
-    },
-    {
       "type": "shell",
         "execute_command": "echo 'packer' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
         "inline": [
+           "echo {{user `pubkey`}} > /tmp/authorized_keys",
            "sudo mv /tmp/authorized_keys /home/{{user `username`}}/.ssh/authorized_keys",
            "sudo chown -R {{user `username`}}:{{user `username`}} /home/{{user `username`}}/.ssh/",
            "sudo chmod 700 /home/{{user `username`}}/.ssh/",
