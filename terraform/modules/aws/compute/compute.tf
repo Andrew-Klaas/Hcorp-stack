@@ -72,6 +72,10 @@ output "consul_ui" {
   value = "${module.consul.consul_ui}"
 }
 
+output "vault_ui" {
+  value = "${module.vault.vault_ui}"
+}
+
 output "nomad_server_addresses" {
   value = "${module.nomad.nomad_server_addresses}"
 }

@@ -107,13 +107,12 @@ module "compute" {
   private_key         = "${var.private_key}"
   consul_server_count = "${var.consul_server_count}"
   nomad_server_count  = 3 #"${var.nomad_server_count}"
-  nomad_client_count  = 3 #"${var.nomad_client_count}"
+  nomad_client_count  = 5 #"${var.nomad_client_count}"
   vault_server_count  = "${var.vault_server_count}"
 
   db_address = "${module.data.db_address}"
   db_user = "${var.db_username}"
   db_password = "${var.db_password}"
-
 }
 
 module "data" {
@@ -164,6 +163,10 @@ output "primary_vault" {
 
 output "vault_server_addresses" {
   value = "${module.compute.vault_server_addresses}"
+}
+
+output "vault_ui" {
+  value = "${module.compute.vault_ui}"
 }
 
 output "db_endpoint" { 

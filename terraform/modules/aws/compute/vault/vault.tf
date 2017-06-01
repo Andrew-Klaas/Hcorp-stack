@@ -165,6 +165,10 @@ resource "aws_security_group" "sg" {
 
 }
 
+output "vault_ui" {
+  value = "http://${aws_instance.vault-server.0.public_dns}:8200/ui/"
+}
+
 output "vault_server_addresses" {
   value = "${formatlist("ssh://%s", aws_instance.vault-server.*.public_dns)}"
 }
