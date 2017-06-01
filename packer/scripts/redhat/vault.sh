@@ -18,6 +18,7 @@ sudo chown root:root /usr/local/bin/vault
 sudo mkdir -p /etc/systemd/system/vault.d
 sudo setcap cap_ipc_lock=+ep /usr/local/bin/vault
 
+
 #echo "Configuring Vault firewall rules..."
 #sudo iptables -I INPUT -s 0/0 -p tcp --dport 8200 -j ACCEPT
 #sudo iptables -I INPUT -s 0/0 -p tcp --dport 8125 -j ACCEPT
