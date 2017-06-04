@@ -5,6 +5,10 @@ set -v
 
 sleep 60s
 
+wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+sudo chmod +x ./jq
+sudo cp jq /usr/bin
+
 echo "starting vault install"
 
 export VAULT_ADDR=http://127.0.0.1:8200
@@ -113,6 +117,13 @@ admin_setup() {
   vault auth-enable userpass
   # create my credentials
   vault write auth/userpass/users/aklaas password=test policies="admin-waycoolapp"
+
+  #Use this to show that user can't see other secets
+  vault mount -path=supersecret generic
+  vault write supersecret/admin admin_user=root admin_password=P@55w3rd
+
+  vault mount -path=verysecret generic
+  vault write verysecret/sensitive key=value password=35616164316lasfdasfasdfasdfasdfasf
 }
 
 pki_setup() {
