@@ -147,7 +147,8 @@ pki_setup() {
 
   # Generate the roles
   vault write ${IntermCAName}/roles/example-dot-com allow_any_name=true max_ttl="1m"
-
+  #auth as root first
+  #vault write vault-ca-intermediate/issue/example-dot-com common_name=blah.example.com
 }
 
 approle_setup() {
