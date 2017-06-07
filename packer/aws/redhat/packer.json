@@ -14,7 +14,7 @@
     "username":        "{{ env `USER` }}",
     "vault_enterprise_url": "{{env `VAULT_ENT_URL`}}",
     "consul_enterprise_url": "{{env `CONSUL_ENT_URL`}}",
-    "pubkey": "{{env `AK_PUB_KEY`}}",
+    "pubkey": "{{env `AK_PUB_KEY`}}"
   },
   "builders": [
     {
