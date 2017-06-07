@@ -5,10 +5,6 @@ set -v
 
 sleep 60s
 
-wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
-sudo chmod +x ./jq
-sudo cp jq /usr/bin
-
 echo "starting vault install"
 
 export VAULT_ADDR=http://127.0.0.1:8200
