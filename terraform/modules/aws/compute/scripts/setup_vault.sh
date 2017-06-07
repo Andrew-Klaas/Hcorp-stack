@@ -1,9 +1,12 @@
 #!/bin/bash
-set -e
 set -x
 set -v
 
 sleep 60s
+
+wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+sudo chmod +x ./jq
+sudo cp jq /usr/bin
 
 echo "starting vault install"
 
