@@ -7,6 +7,10 @@ set -e
 sudo yum -y update
 sudo yum install -y vim curl wget unzip bind-utils
 
+wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+sudo chmod +x ./jq
+sudo cp jq /usr/bin
+
 DNSLISTENADDR="127.0.0.1"
 
 echo Installing Dnsmasq...
