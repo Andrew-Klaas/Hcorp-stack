@@ -49,6 +49,13 @@
   "provisioners": [
     {
       "type": "shell",
+      "execute_command": "echo 'packer' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+      "inline": [
+        "curl -L {{ user `consul_enterprise_url`}} > /tmp/consul.zip"
+      ]
+    },
+    {
+      "type": "shell",
       "scripts": [
         "./scripts/redhat/base.sh",
         "./scripts/redhat/consul.sh",
