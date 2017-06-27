@@ -14,7 +14,6 @@ variable "customer_gateway_ip" {}
 variable "public_subnets" { default = [] }
 variable "public_subnet_names" { default = [] }
 
-
 variable "user" {}
 variable "key_path" {}
 variable "private_key" {}
