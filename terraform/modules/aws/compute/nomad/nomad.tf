@@ -5,7 +5,6 @@ variable "consul_server_count" {}
 variable "nomad_server_count" {}
 variable "nomad_client_count" {}
 
-
 variable "private_subnet_ids" {}
 variable "public_subnet_ids" {}
 variable "vpc_id" {}

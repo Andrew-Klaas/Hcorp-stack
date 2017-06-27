@@ -91,7 +91,6 @@ module "network" {
 
 module "compute" {
   source = "terraform/modules/aws/compute"
-
   name               = "${var.name}"
   region             = "${var.region}"
   
