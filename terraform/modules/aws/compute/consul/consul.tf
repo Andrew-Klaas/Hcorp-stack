@@ -129,6 +129,10 @@ resource "aws_security_group" "sg" {
 
 }
 
+output "consul_server_addresses" {
+  value = "${formatlist("ssh://%s", aws_instance.consul-server.*.public_dns)}"
+}
+
 output "consul_ui" {
   value = "http://${aws_instance.consul-server.0.public_dns}:8500/ui/"
 }

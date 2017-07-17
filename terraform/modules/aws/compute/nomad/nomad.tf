@@ -133,12 +133,6 @@ resource "aws_instance" "nomad-client" {
 
     provisioner "remote-exec" {
         inline = [
-            "sudo systemctl start docker"
-        ]
-    }
-
-    provisioner "remote-exec" {
-        inline = [
             "sudo systemctl enable dnsmasq",
             "sudo systemctl start dnsmasq"
         ]

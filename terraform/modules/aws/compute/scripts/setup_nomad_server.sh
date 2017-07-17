@@ -58,7 +58,11 @@ sudo systemctl start nomad
 sudo yum install -y java-1.8.0-openjdk
 ## Download and unpack spark
 
-sudo wget -P /ops/examples/nomad/spark https://s3.amazonaws.com/rcgenova-nomad-spark/spark-2.1.0-bin-nomad-preview-6.tgz
-sudo tar -xvf /ops/examples/nomad/spark/spark-2.1.0-bin-nomad-preview-6.tgz --directory /ops/examples/nomad/spark
-sudo mv /ops/examples/nomad/spark/spark-2.1.0-bin-nomad-preview-6 /ops/examples/nomad/spark/spark
-sudo rm /ops/examples/nomad/spark/spark-2.1.0-bin-nomad-preview-6.tgz
+sudo wget -P /ops/examples/spark https://s3.amazonaws.com/nomad-spark/spark-2.1.0-bin-nomad.tgz
+sudo tar -xvf /ops/examples/spark/spark-2.1.0-bin-nomad.tgz --directory /ops/examples/spark
+sudo mv /ops/examples/spark/spark-2.1.0-bin-nomad /usr/local/bin/spark
+sudo chown -R root:root /usr/local/bin/spark
+
+
+
+

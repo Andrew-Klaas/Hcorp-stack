@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -exv
+set -x
 
 
 NOMAD_VERSION=0.5.6
@@ -15,10 +15,32 @@ INSTANCE_PRIVATE_IP=$(/usr/sbin/ifconfig eth0 | grep "inet addr" | awk '{ print 
 echo "Installing dependencies..."
 sudo yum install -y wget build-essential curl git-core mercurial bzr libpcre3-dev pkg-config zip default-jre qemu libc6-dev-i386 silversearcher-ag jq htop vim unzip liblxc1 lxc-dev docker.io 
 sudo yum install -y yum-utils 
-sudo yum-config-manager \
-    --add-repo \
-    https://download.docker.com/linux/centos/docker-ce.repo
-sudo yum install -y docker-ce
+
+YUM=$(which yum 2>/dev/null)
+APT_GET=$(which apt-get 2>/dev/null)
+
+logger "Running"
+
+logger() {
+  DT=$(date '+%Y/%m/%d %H:%M:%S')
+  echo "$DT $0: $1"
+}
+
+if [[ ! -z ${YUM} ]]; then
+  echo "Installing Docker with RHEL Workaround"
+  sudo yum -y install ftp://fr2.rpmfind.net/linux/centos/7.3.1611/extras/x86_64/Packages/container-selinux-2.12-2.gite7096ce.el7.noarch.rpm
+  curl -sSL https://get.docker.com/ | sed -e '365s/redhat/centos/' | sed -e '376s/redhat/centos/' | sudo sh
+elif [[ ! -z ${APT_GET} ]]; then
+  echo "Installing Docker"
+  curl -sSL https://get.docker.com/ | sudo sh
+else
+  logger "Prerequisites not installed due to OS detection failure"
+  exit 1;
+fi
+
+sudo sh -c "echo \"DOCKER_OPTS='--dns 127.0.0.1 --dns 8.8.8.8 --dns-search service.consul'\" >> /etc/default/docker"
+
+logger "Complete"
 
 sudo yum install -y java-1.8.0-openjdk
 ## Download and unpack spark

@@ -2,9 +2,9 @@
 
   "variables": {
     "aws_access_key": "{{ env `AWS_ACCESS_KEY_ID` }}",
-    "aws_access_key": "{{ env `AWS_SECRET_ACCESS_KEY` }}",
+    "aws_secret_key": "{{ env `AWS_SECRET_ACCESS_KEY` }}",
     "aws_region": "{{ env `AWS_DEFAULT_REGION` }}",
-    "us_east_1_ami":   "ami-2cade64c",
+    "us_east_1_ami":   "ami-9e2f0988",
     "image_name":            "ak-redhat",
     "us_east_1_name":  "aws-us-east-1-redhat",
     "ssh_username":    "ec2-user",
@@ -29,7 +29,10 @@
       "ssh_username": "ec2-user",
       "ssh_pty": true,
       "associate_public_ip_address": true,
-      "ami_name": "{{user `us_east_1_name`}}-nomad-{{timestamp}}"
+      "ami_name": "{{user `us_east_1_name`}}-nomad-{{timestamp}}",
+      "tags": {
+        "Name": "aklaas redhat nomad server"
+      }
     },
     {
       "name": "ak-redhat-vault",
@@ -42,7 +45,10 @@
       "instance_type": "t2.micro",
       "ssh_username": "ec2-user",
       "ssh_pty": true,
-      "ami_name": "{{user `us_east_1_name`}}-vault-{{timestamp}}"
+      "ami_name": "{{user `us_east_1_name`}}-vault-{{timestamp}}",
+      "tags": {
+        "Name": "aklaas redhat vault server"
+      }
     }
   ],
 

@@ -18,6 +18,7 @@ variable "db_address"  { }
 variable "db_user"     { }
 variable "db_password" { }
 
+
 module "vault" {
   source = "./vault"
   user = "${var.user}"
@@ -68,12 +69,12 @@ output "primary_consul" {
   value = "${module.consul.primary_consul}"
 }
 
-output "consul_ui" {
-  value = "${module.consul.consul_ui}"
+output "consul_server_addresses" {
+  value = "${module.consul.consul_server_addresses}"
 }
 
-output "vault_ui" {
-  value = "${module.vault.vault_ui}"
+output "consul_ui" {
+  value = "${module.consul.consul_ui}"
 }
 
 output "nomad_server_addresses" {
@@ -82,6 +83,10 @@ output "nomad_server_addresses" {
 
 output "nomad_client_addresses" {
   value = "${module.nomad.nomad_client_addresses}"
+}
+
+output "vault_ui" {
+  value = "${module.vault.vault_ui}"
 }
 
 output "vault_server_addresses" {
