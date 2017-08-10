@@ -9,8 +9,8 @@ INSTANCE_PRIVATE_IP=$(/sbin/ifconfig eth0 | grep "inet" | awk 'FNR == 1 {print $
 INSTANCE_HOST_NAME=$(hostname)
 nomad_server_nodes=3
 
-#make sure Vault is done, need to pull auth token 
-# 
+#make sure Vault is done, need to pull auth token
+#
 # Note this is a hack, need to refactor, we should do a for loop and wait for the key to be put in consul
 #
 export VAULT_TOKEN=$(consul kv get service/vault/root-token)
@@ -43,8 +43,7 @@ vault {
 }
 EOF
 
-sudo echo 'nameserver 127.0.0.1' | sudo cat - /etc/resolv.conf > temp && sudo mv temp /etc/resolv.conf
-#sudo echo 'nameserver 127.0.0.1' | sudo cat /etc/resolv.conf - > temp && sudo mv temp /etc/resolv.conf
+sudo echo "127.0.0.1 $(hostname)" | sudo tee --append /etc/hosts
 sudo service dnsmasq restart
 
 #######################################
@@ -63,6 +62,16 @@ sudo tar -xvf /ops/examples/spark/spark-2.1.0-bin-nomad.tgz --directory /ops/exa
 sudo mv /ops/examples/spark/spark-2.1.0-bin-nomad /usr/local/bin/spark
 sudo chown -R root:root /usr/local/bin/spark
 
+sudo yum-config-manager  -y   --add-repo     https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install -y docker-ce
 
+sudo systemctl enable docker.service
+sudo systemctl start docker
 
+sleep 5s
 
+DOCKER_BRIDGE_IP_ADDRESS=(`ifconfig docker0 2>/dev/null|awk '/inet/ {print $2}'|sed 's/addr://'`)
+sudo echo "nameserver $DOCKER_BRIDGE_IP_ADDRESS" | sudo tee /etc/resolv.conf.new
+sudo cat /etc/resolv.conf | sudo tee --append /etc/resolv.conf.new
+sudo cp /etc/resolv.conf.new /etc/resolv.conf
+sudo systemctl restart dnsmasq

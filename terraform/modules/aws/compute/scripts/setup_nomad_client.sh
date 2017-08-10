@@ -41,8 +41,7 @@ vault {
 }
 EOF
 
-sudo echo 'nameserver 127.0.0.1' | sudo cat - /etc/resolv.conf > temp && sudo mv temp /etc/resolv.conf
-#sudo echo 'nameserver 127.0.0.1' | sudo cat /etc/resolv.conf - > temp && sudo mv temp /etc/resolv.conf
+sudo echo "127.0.0.1 $(hostname)" | sudo tee --append /etc/hosts
 sudo service dnsmasq restart
 
 #######################################
@@ -52,7 +51,17 @@ sudo systemctl daemon-reload
 sudo systemctl enable nomad.service
 sudo systemctl start nomad
 
+sudo yum-config-manager  -y   --add-repo     https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install -y docker-ce
+sudo systemctl start docker
+
+sleep 1s
+
+DOCKER_BRIDGE_IP_ADDRESS=(`ifconfig docker0 2>/dev/null|awk '/inet/ {print $2}'|sed 's/addr://'`)
+sudo echo "nameserver $DOCKER_BRIDGE_IP_ADDRESS" | sudo tee /etc/resolv.conf.new
+sudo cat /etc/resolv.conf | sudo tee --append /etc/resolv.conf.new
+sudo mv /etc/resolv.conf.new /etc/resolv.conf
+sudo systemctl restart dnsmasq
+
 
 sudo yum install -y java-1.8.0-openjdk
-
-

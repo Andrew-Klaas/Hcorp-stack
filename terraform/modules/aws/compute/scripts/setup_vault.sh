@@ -1,4 +1,4 @@
-#!/bin/bash
+ #!/bin/bash
 set -x
 set -v
 
@@ -7,6 +7,8 @@ sleep 60s
 wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
 sudo chmod +x ./jq
 sudo cp jq /usr/bin
+
+username=${USER}
 
 echo "starting vault install"
 
@@ -129,6 +131,7 @@ pki_setup() {
 
   # Mount Root CA and generate cert
   vault unmount ${RootCAName} &> /dev/null || true
+
   vault mount -path ${RootCAName} pki
   vault mount-tune -max-lease-ttl=87600h ${RootCAName}
   vault write -format=json ${RootCAName}/root/generate/internal \
@@ -145,7 +148,7 @@ pki_setup() {
   vault write ${IntermCAName}/intermediate/set-signed certificate=@/tmp/certs/${IntermCAName}.pem
 
   # Generate the roles
-  vault write ${IntermCAName}/roles/example-dot-com allow_any_name=true max_ttl="1m"
+  vault write ${IntermCAName}/roles/example-dot-com allow_any_name=true max_ttl="1m" generate_lease=true
   #auth as root first
   #vault write vault-ca-intermediate/issue/example-dot-com common_name=blah.example.com
 }
@@ -171,6 +174,20 @@ approle_setup() {
   curl -fX PUT 127.0.0.1:8500/v1/kv/service/vault/secret_id_accessor -d $(cat /tmp/secret_id_accessor)
 }
 
+totp_setup() {
+  username=${USER}
+  vault mount totp
+  sudo tee /home/${username}/setup-totp-gen.sh > /dev/null <<EOF
+    vault write totp/keys/test \
+    generate=true \
+    issuer=Vault \
+    account_name=aklaas@aklaas.com
+EOF
+
+  sudo chown "${username}:${username}" "/home/${username}/setup-totp-gen.sh"
+  sudo chmod +x "/home/${username}/setup-totp-gen.sh"
+}
+
 if vault status | grep active > /dev/null; then
   # auth with root token
   #Create Nomad Vault Token for mysql
@@ -191,9 +208,8 @@ if vault status | grep active > /dev/null; then
   policy_setup
   admin_setup
   pki_setup
+  totp_setup
 
 fi
 sudo echo "test6" > /tmp/test6
 #instructions
-
-

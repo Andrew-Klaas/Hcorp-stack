@@ -49,11 +49,13 @@ variable "db_backup_window" {}
 # devaws #
 ##########
 
+/*
 terraform {
   backend "atlas" {
     name = "aklaas/Hcorp-demo "
   }
 }
+*/
 
 provider "aws" {
   region = "${var.region}"
