@@ -49,13 +49,11 @@ variable "db_backup_window" {}
 # devaws #
 ##########
 
-/*
 terraform {
   backend "atlas" {
     name = "aklaas/Hcorp-demo "
   }
 }
-*/
 
 provider "aws" {
   region = "${var.region}"
@@ -93,10 +91,10 @@ module "compute" {
   source = "terraform/modules/aws/compute"
   name               = "${var.name}"
   region             = "${var.region}"
-  
+
   vpc_id             = "${module.network.vpc_id}"
   vpc_cidr           = "${var.vpc_cidr}"
-  
+
   private_subnet_ids = "${module.network.private_subnet_ids}"
   public_subnet_ids  = "${module.network.public_subnet_ids}"
 
@@ -171,10 +169,9 @@ output "vault_ui" {
   value = "${module.compute.vault_ui}"
 }
 
-output "db_endpoint" { 
-  value = "${module.data.db_endpoint}" 
+output "db_endpoint" {
+  value = "${module.data.db_endpoint}"
 }
-output "db_address" { 
-  value = "${module.data.db_address}" 
+output "db_address" {
+  value = "${module.data.db_address}"
 }
-

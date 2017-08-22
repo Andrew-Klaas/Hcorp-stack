@@ -52,4 +52,3 @@ sudo chmod 0644 /etc/default/consul
 sudo echo 'nameserver 127.0.0.1' | sudo cat - /etc/resolv.conf > temp && sudo mv temp /etc/resolv.conf
 #sudo echo 'nameserver 127.0.0.1' | sudo cat /etc/resolv.conf - > temp && sudo mv temp /etc/resolv.conf
 sudo service dnsmasq restart
-

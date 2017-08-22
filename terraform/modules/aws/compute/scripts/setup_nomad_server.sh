@@ -5,7 +5,8 @@
 
 sleep 20s
 
-INSTANCE_PRIVATE_IP=$(/sbin/ifconfig eth0 | grep "inet" | awk 'FNR == 1 {print $2}')
+#INSTANCE_PRIVATE_IP=$(/sbin/ifconfig eth0 | grep "inet" | awk 'FNR == 1 {print $2}')
+INSTANCE_PRIVATE_IP=$(ifconfig eth0 | grep "inet addr" | awk '{ print substr($2,6) }')
 INSTANCE_HOST_NAME=$(hostname)
 nomad_server_nodes=3
 
@@ -54,7 +55,7 @@ sudo systemctl enable nomad.service
 sudo systemctl start nomad
 
 
-sudo yum install -y java-1.8.0-openjdk
+#sudo yum install -y java-1.8.0-openjdk
 ## Download and unpack spark
 
 sudo wget -P /ops/examples/spark https://s3.amazonaws.com/nomad-spark/spark-2.1.0-bin-nomad.tgz
@@ -62,16 +63,17 @@ sudo tar -xvf /ops/examples/spark/spark-2.1.0-bin-nomad.tgz --directory /ops/exa
 sudo mv /ops/examples/spark/spark-2.1.0-bin-nomad /usr/local/bin/spark
 sudo chown -R root:root /usr/local/bin/spark
 
-sudo yum-config-manager  -y   --add-repo     https://download.docker.com/linux/centos/docker-ce.repo
-sudo yum install -y docker-ce
-
 sudo systemctl enable docker.service
 sudo systemctl start docker
 
 sleep 5s
 
-DOCKER_BRIDGE_IP_ADDRESS=(`ifconfig docker0 2>/dev/null|awk '/inet/ {print $2}'|sed 's/addr://'`)
+DOCKER_BRIDGE_IP_ADDRESS=(`ifconfig docker0 2>/dev/null|awk '/inet addr:/ {print $2}'|sed 's/addr://'`)
 sudo echo "nameserver $DOCKER_BRIDGE_IP_ADDRESS" | sudo tee /etc/resolv.conf.new
 sudo cat /etc/resolv.conf | sudo tee --append /etc/resolv.conf.new
 sudo cp /etc/resolv.conf.new /etc/resolv.conf
 sudo systemctl restart dnsmasq
+
+sudo add-apt-repository -y ppa:openjdk-r/ppa
+sudo apt-get update
+sudo apt-get install -y openjdk-8-jdk
