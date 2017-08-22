@@ -8,7 +8,9 @@ set -v
 set -x
 sleep 20s
 
-INSTANCE_PRIVATE_IP=$(/sbin/ifconfig eth0 | grep "inet" | awk 'FNR == 1 {print $2}')
+#INSTANCE_PRIVATE_IP=$(/sbin/ifconfig eth0 | grep "inet" | awk 'FNR == 1 {print $2}')
+INSTANCE_PRIVATE_IP=$(ifconfig eth0 | grep "inet addr" | awk '{ print substr($2,6) }')
+
 INSTANCE_HOST_NAME=$(hostname)
 nomad_server_nodes=3
 
@@ -50,18 +52,18 @@ sudo service dnsmasq restart
 sudo systemctl daemon-reload
 sudo systemctl enable nomad.service
 sudo systemctl start nomad
-
-sudo yum-config-manager  -y   --add-repo     https://download.docker.com/linux/centos/docker-ce.repo
-sudo yum install -y docker-ce
 sudo systemctl start docker
 
 sleep 1s
 
-DOCKER_BRIDGE_IP_ADDRESS=(`ifconfig docker0 2>/dev/null|awk '/inet/ {print $2}'|sed 's/addr://'`)
+DOCKER_BRIDGE_IP_ADDRESS=(`ifconfig docker0 2>/dev/null|awk '/inet addr:/ {print $2}'|sed 's/addr://'`)
+
 sudo echo "nameserver $DOCKER_BRIDGE_IP_ADDRESS" | sudo tee /etc/resolv.conf.new
 sudo cat /etc/resolv.conf | sudo tee --append /etc/resolv.conf.new
 sudo mv /etc/resolv.conf.new /etc/resolv.conf
 sudo systemctl restart dnsmasq
 
-
-sudo yum install -y java-1.8.0-openjdk
+sudo add-apt-repository -y ppa:openjdk-r/ppa
+sudo apt-get update
+sudo apt-get install -y openjdk-8-jdk
+#sudo yum install -y java-1.8.0-openjdk
