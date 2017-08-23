@@ -82,6 +82,7 @@ resource "aws_instance" "nomad-server" {
     }
 }
 
+
 resource "aws_instance" "nomad-client" {
     ami = "${data.aws_ami.redhat.id}"
     instance_type = "t2.medium"
