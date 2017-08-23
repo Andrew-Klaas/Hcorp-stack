@@ -73,7 +73,3 @@ sudo echo "nameserver $DOCKER_BRIDGE_IP_ADDRESS" | sudo tee /etc/resolv.conf.new
 sudo cat /etc/resolv.conf | sudo tee --append /etc/resolv.conf.new
 sudo cp /etc/resolv.conf.new /etc/resolv.conf
 sudo systemctl restart dnsmasq
-
-sudo add-apt-repository -y ppa:openjdk-r/ppa
-sudo apt-get update
-sudo apt-get install -y openjdk-8-jdk
