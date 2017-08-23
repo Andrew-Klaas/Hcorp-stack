@@ -64,6 +64,4 @@ sudo mv /etc/resolv.conf.new /etc/resolv.conf
 sudo systemctl restart dnsmasq
 
 sudo add-apt-repository -y ppa:openjdk-r/ppa
-sudo apt-get update
 sudo apt-get install -y openjdk-8-jdk
-#sudo yum install -y java-1.8.0-openjdk
