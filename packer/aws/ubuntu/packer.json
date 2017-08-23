@@ -1,0 +1,117 @@
+{
+
+  "variables": {
+    "aws_access_key": "{{ env `AWS_ACCESS_KEY_ID` }}",
+    "aws_secret_key": "{{ env `AWS_SECRET_ACCESS_KEY` }}",
+    "aws_region": "{{ env `AWS_DEFAULT_REGION` }}",
+    "us_east_1_ami":   "ami-cd0f5cb6",
+    "image_name":       "ak-ubuntu",
+    "us_east_1_name":  "aws-us-east-1-ubuntu",
+    "ssh_username":    "ubuntu",
+    "scripts_dir":     "scripts/ubuntu",
+    "config_dir":      "config",
+    "dns_listen_addr": "127.0.0.1",
+    "username":        "{{ env `USER` }}",
+    "vault_enterprise_url": "{{env `VAULT_ENT_URL`}}",
+    "consul_enterprise_url": "{{env `CONSUL_ENT_URL`}}",
+    "pubkey": "{{env `AK_PUB_KEY`}}"
+  },
+  "builders": [
+    {
+      "name": "ak-ubuntu-nomad",
+      "type": "amazon-ebs",
+      "region": "{{user `aws_region`}}",
+      "access_key":      "{{user `aws_access_key`}}",
+      "secret_key":      "{{user `aws_secret_key`}}",
+      "source_ami": "{{user `us_east_1_ami`}}",
+      "ssh_timeout": "5m",
+      "instance_type": "t2.micro",
+      "ssh_username": "ubuntu",
+      "ssh_pty": true,
+      "associate_public_ip_address": true,
+      "ami_name": "{{user `us_east_1_name`}}-nomad-{{timestamp}}",
+      "tags": {
+        "Name": "aklaas ubuntu nomad server"
+      }
+    },
+    {
+      "name": "ak-ubuntu-vault",
+      "type": "amazon-ebs",
+      "region": "{{user `aws_region`}}",
+      "access_key":      "{{user `aws_access_key`}}",
+      "secret_key":      "{{user `aws_secret_key`}}",
+      "source_ami": "{{user `us_east_1_ami`}}",
+      "ssh_timeout": "5m",
+      "instance_type": "t2.micro",
+      "ssh_username": "ubuntu",
+      "ssh_pty": true,
+      "ami_name": "{{user `us_east_1_name`}}-vault-{{timestamp}}",
+      "tags": {
+        "Name": "aklaas ubuntu vault server"
+      }
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo 'packer' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+      "inline": [
+        "curl -L {{ user `consul_enterprise_url`}} > /tmp/consul.zip"
+      ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "./scripts/ubuntu/base.sh",
+        "./scripts/ubuntu/consul.sh",
+        "./scripts/ubuntu/consul-template.sh",
+        "./scripts/ubuntu/consul-ui.sh"
+      ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "./scripts/ubuntu/nomad.sh"
+      ],
+      "only":   ["ak-ubuntu-nomad"]
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo 'packer' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+      "inline": [
+        "curl -L {{ user `vault_enterprise_url`}} > /tmp/vault.zip"
+      ],
+      "only":   ["ak-ubuntu-vault"]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "./scripts/ubuntu/vault.sh"
+      ],
+      "only":   ["ak-ubuntu-vault"]
+    },
+    {
+      "type": "shell",
+        "execute_command": "echo 'packer' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+        "inline": [
+           "sudo useradd -m {{user `username`}} -s /bin/bash",
+           "sudo mkdir -p /home/{{user `username`}}/.ssh/",
+           "sudo echo \"{{user `username`}} ALL=(root) NOPASSWD: ALL\" >> /etc/sudoers.d/{{user `username`}}"
+            ]
+    },
+    {
+      "type": "shell",
+        "execute_command": "echo 'packer' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+        "inline": [
+           "echo '{{user `pubkey`}}' > /tmp/authorized_keys",
+           "echo '{{user `pubkey`}}' > /tmp/authorized_keys_proof",
+           "sudo mv /tmp/authorized_keys /home/{{user `username`}}/.ssh/authorized_keys",
+           "sudo chown -R {{user `username`}}:{{user `username`}} /home/{{user `username`}}/.ssh/",
+           "sudo chmod 700 /home/{{user `username`}}/.ssh/",
+           "sudo chmod 600 /home/{{user `username`}}/.ssh/authorized_keys"
+            ]
+    }
+  ]
+
+}
