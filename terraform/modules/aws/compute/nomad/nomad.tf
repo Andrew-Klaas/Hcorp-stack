@@ -45,7 +45,7 @@ resource "aws_instance" "nomad-server" {
 
     provisioner "remote-exec" {
         scripts = [
-            "${path.module}/../scripts/setup_consul_client.sh"
+            "${path.module}/scripts/setup_consul_client.sh"
         ]
     }
 
@@ -58,7 +58,7 @@ resource "aws_instance" "nomad-server" {
 
     provisioner "remote-exec" {
         scripts = [
-            "${path.module}/../scripts/setup_nomad_server.sh"
+            "${path.module}/scripts/setup_nomad_server.sh"
         ]
     }
 
@@ -108,7 +108,7 @@ resource "aws_instance" "nomad-client" {
 
     provisioner "remote-exec" {
         scripts = [
-            "${path.module}/../scripts/setup_consul_client.sh"
+            "${path.module}/scripts/setup_consul_client.sh"
         ]
     }
 
@@ -121,7 +121,7 @@ resource "aws_instance" "nomad-client" {
 
     provisioner "remote-exec" {
         scripts = [
-            "${path.module}/../scripts/setup_nomad_client.sh"
+            "${path.module}/scripts/setup_nomad_client.sh"
         ]
     }
 

@@ -46,7 +46,7 @@ resource "aws_instance" "vault-server" {
 
     provisioner "remote-exec" {
         scripts = [
-            "${path.module}/../scripts/setup_consul_client.sh"
+            "${path.module}/scripts/setup_consul_client.sh"
         ]
     }
 
@@ -71,12 +71,12 @@ resource "aws_instance" "vault-server" {
     }
 
     provisioner "file" {
-        source = "${path.module}/../scripts/setup_vault.sh",
+        source = "${path.module}/scripts/setup_vault.sh",
         destination = "/tmp/setup_vault.sh"
     }
 
     provisioner "file" {
-        source = "${path.module}/../scripts/setup_mysql_vault.sh",
+        source = "${path.module}/scripts/setup_mysql_vault.sh",
         destination = "/tmp/setup_mysql_vault.sh"
     }
 

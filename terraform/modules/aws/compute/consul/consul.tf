@@ -42,8 +42,8 @@ resource "aws_instance" "consul-server" {
 
     provisioner "remote-exec" {
         scripts = [
-            "../scripts/setup_consul_server.sh"
-            #"${path.module}/../scripts/register_db_consul.sh"
+            "${path.module}/scripts/setup_consul_server.sh"
+            #"${path.module}/scripts/register_db_consul.sh"
         ]
     }
 
