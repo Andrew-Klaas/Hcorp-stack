@@ -44,7 +44,6 @@ vault {
 EOF
 
 sudo echo "127.0.0.1 $(hostname)" | sudo tee --append /etc/hosts
-sudo service dnsmasq restart
 
 #######################################
 # START SERVICES
@@ -68,6 +67,9 @@ sudo systemctl restart dnsmasq
 sleep 5s
 
 sudo add-apt-repository -y ppa:openjdk-r/ppa
+
+sleep 1s
+
 sudo apt-get install -y openjdk-8-jdk
 
 sleep 5s

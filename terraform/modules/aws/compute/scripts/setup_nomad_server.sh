@@ -58,10 +58,10 @@ sudo systemctl start nomad
 #sudo yum install -y java-1.8.0-openjdk
 ## Download and unpack spark
 
-sudo wget -P /ops/examples/spark https://s3.amazonaws.com/nomad-spark/spark-2.1.0-bin-nomad.tgz
-sudo tar -xvf /ops/examples/spark/spark-2.1.0-bin-nomad.tgz --directory /ops/examples/spark
-sudo mv /ops/examples/spark/spark-2.1.0-bin-nomad /usr/local/bin/spark
-sudo chown -R root:root /usr/local/bin/spark
+#sudo wget -P /ops/examples/spark https://s3.amazonaws.com/nomad-spark/spark-2.1.0-bin-nomad.tgz
+#sudo tar -xvf /ops/examples/spark/spark-2.1.0-bin-nomad.tgz --directory /ops/examples/spark
+#sudo mv /ops/examples/spark/spark-2.1.0-bin-nomad /usr/local/bin/spark
+#sudo chown -R root:root /usr/local/bin/spark
 
 sudo systemctl enable docker.service
 sudo systemctl start docker
