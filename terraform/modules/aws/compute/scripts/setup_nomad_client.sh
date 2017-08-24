@@ -54,14 +54,22 @@ sudo systemctl enable nomad.service
 sudo systemctl start nomad
 sudo systemctl start docker
 
-sleep 1s
+sleep 5s
 
 DOCKER_BRIDGE_IP_ADDRESS=(`ifconfig docker0 2>/dev/null|awk '/inet addr:/ {print $2}'|sed 's/addr://'`)
+
+sleep 1s
 
 sudo echo "nameserver $DOCKER_BRIDGE_IP_ADDRESS" | sudo tee /etc/resolv.conf.new
 sudo cat /etc/resolv.conf | sudo tee --append /etc/resolv.conf.new
 sudo mv /etc/resolv.conf.new /etc/resolv.conf
 sudo systemctl restart dnsmasq
 
+sleep 5s
+
 sudo add-apt-repository -y ppa:openjdk-r/ppa
 sudo apt-get install -y openjdk-8-jdk
+
+sleep 5s
+
+sudo systemctl start dnsmasq

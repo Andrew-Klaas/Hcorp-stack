@@ -73,13 +73,6 @@ resource "aws_instance" "nomad-server" {
       source      = "${path.module}/jobs"
       destination = "./"
     }
-
-    provisioner "remote-exec" {
-        inline = [
-            "sudo systemctl enable dnsmasq",
-            "sudo systemctl start dnsmasq"
-        ]
-    }
 }
 
 
@@ -131,15 +124,7 @@ resource "aws_instance" "nomad-client" {
             "sudo systemctl start nomad"
         ]
     }
-
-    provisioner "remote-exec" {
-        inline = [
-            "sudo systemctl enable dnsmasq",
-            "sudo systemctl start dnsmasq"
-        ]
-    }
 }
-
 resource "aws_security_group" "sg" {
   name        = "Nomad-sg"
   description = "security group for nomad"
