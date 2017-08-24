@@ -4,7 +4,8 @@ set -e
 
 echo "Fetching Vault..."
 VAULT=0.7.2
-sudo cd /tmp
+
+cd /tmp
 #wget $1 \
 #    --quiet \
 #    -O vault.zip
