@@ -15,7 +15,7 @@ data "aws_ami" "redhat" {
   owners = ["self"]
   filter {
     name = "name"
-    values = ["aws-us-east-1-redhat-nomad*"]
+    values = ["aws-us-east-1-ubuntu-nomad*"]
   }
 }
 
