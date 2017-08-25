@@ -118,12 +118,6 @@ resource "aws_instance" "nomad-client" {
         ]
     }
 
-    provisioner "remote-exec" {
-        inline = [
-            "sudo systemctl enable nomad.service",
-            "sudo systemctl start nomad"
-        ]
-    }
 }
 resource "aws_security_group" "sg" {
   name        = "Nomad-sg"

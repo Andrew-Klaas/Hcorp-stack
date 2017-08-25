@@ -64,10 +64,11 @@ sudo mv /etc/resolv.conf.new /etc/resolv.conf
 sleep 1s
 
 sudo add-apt-repository -y ppa:openjdk-r/ppa
+sudo apt-get update
 sudo apt-get install -y openjdk-8-jdk
 
 sleep 1s
 
-sudo systemctl start dnsmasq
+sudo systemctl restart dnsmasq
 
 sleep 1s
