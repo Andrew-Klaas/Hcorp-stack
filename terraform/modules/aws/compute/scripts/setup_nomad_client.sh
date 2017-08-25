@@ -64,7 +64,9 @@ sudo mv /etc/resolv.conf.new /etc/resolv.conf
 sleep 1s
 
 sudo add-apt-repository -y ppa:openjdk-r/ppa
+sleep 1s
 sudo apt-get update
+sleep 1s
 sudo apt-get install -y openjdk-8-jdk
 
 sleep 1s
