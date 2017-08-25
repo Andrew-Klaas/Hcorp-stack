@@ -6,7 +6,7 @@
 set -e
 set -v
 set -x
-sleep 20s
+sleep 1s
 
 #INSTANCE_PRIVATE_IP=$(/sbin/ifconfig eth0 | grep "inet" | awk 'FNR == 1 {print $2}')
 INSTANCE_PRIVATE_IP=$(ifconfig eth0 | grep "inet addr" | awk '{ print substr($2,6) }')
@@ -57,19 +57,17 @@ sudo systemctl start docker
 sleep 5s
 
 DOCKER_BRIDGE_IP_ADDRESS=(`ifconfig docker0 2>/dev/null|awk '/inet addr:/ {print $2}'|sed 's/addr://'`)
-
-sleep 1s
-
 sudo echo "nameserver $DOCKER_BRIDGE_IP_ADDRESS" | sudo tee /etc/resolv.conf.new
 sudo cat /etc/resolv.conf | sudo tee --append /etc/resolv.conf.new
 sudo mv /etc/resolv.conf.new /etc/resolv.conf
-sudo systemctl restart dnsmasq
 
-sleep 5s
+sleep 1s
 
 sudo add-apt-repository -y ppa:openjdk-r/ppa
 sudo apt-get install -y openjdk-8-jdk
 
-sleep 5s
+sleep 1s
 
 sudo systemctl start dnsmasq
+
+sleep 1s
