@@ -6,7 +6,7 @@ set -x
 # Read from the file we created
 SERVER_COUNT=$(cat /tmp/consul-server-count | tr -d '\n')
 CONSUL_JOIN=$(cat /tmp/consul-server-addr | tr -d '\n')
-INSTANCE_PRIVATE_IP=$(/sbin/ifconfig eth0 | grep "inet" | awk 'FNR == 1 {print $2}')
+INSTANCE_PRIVATE_IP=$(ifconfig eth0 | grep "inet addr" | awk '{ print substr($2,6) }')
 
 
 # Write the flags to a temporary file

@@ -82,7 +82,6 @@ resource "aws_instance" "vault-server" {
 
     provisioner "remote-exec" {
         inline = [
-            "sleep 10s",
             "sudo chmod +x /tmp/setup_mysql_vault.sh",
             "sudo chmod +x /tmp/setup_vault.sh",
             "/tmp/setup_vault.sh &> /tmp/setup.log",
@@ -130,6 +129,26 @@ resource "aws_security_group" "sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  ingress {
+    from_port   = 8200
+    to_port     = 8200
+    protocol    = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Vault replication traffic
+  ingress {
+    from_port   = 8201
+    to_port     = 8201
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 8201
+    to_port     = 8201
+    protocol    = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   # Vault stats
   ingress {
@@ -152,6 +171,12 @@ resource "aws_security_group" "sg" {
     from_port   = 8500
     to_port     = 8500
     protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 8500
+    to_port     = 8500
+    protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 

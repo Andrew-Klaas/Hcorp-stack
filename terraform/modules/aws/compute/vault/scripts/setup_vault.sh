@@ -148,7 +148,7 @@ pki_setup() {
   vault write ${IntermCAName}/intermediate/set-signed certificate=@/tmp/certs/${IntermCAName}.pem
 
   # Generate the roles
-  vault write ${IntermCAName}/roles/example-dot-com allow_any_name=true max_ttl="1m" generate_lease=true
+  vault write ${IntermCAName}/roles/example-dot-com allow_any_name=true max_ttl="1000h" generate_lease=true
   #auth as root first
   #vault write vault-ca-intermediate/issue/example-dot-com common_name=blah.example.com
 }

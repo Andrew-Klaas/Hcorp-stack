@@ -1,19 +1,20 @@
 #!/bin/bash
-
+set -v
+set -x
 #step 1:
 if [ -z "$1" ]; then
 	echo "No arg/endpoint specified!"
 	exit
 fi
 if vault status | grep active > /dev/null; then
-	sudo yum install -y mysql
+	sudo apt-get install -y mysql-client
 	export ROOT_TOKEN=$(consul kv get service/vault/root-token)
 	export NOMAD_TOKEN=$(consul kv get service/vault/nomad-token)
 	vault auth $ROOT_TOKEN
 	vault write mysql/config/connection connection_url="$2:$3@tcp($1:3306)/"
 	vault write mysql/roles/app sql="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT ALL PRIVILEGES ON app.* TO '{{name}}'@'%';"
 	vault read mysql/creds/app
-	echo "mysql ip:"  
+	echo "mysql ip:"
 	echo $MYSQL_IP
 	echo "nomad-token"
 	echo $NOMAD_TOKEN

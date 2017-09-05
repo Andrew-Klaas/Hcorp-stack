@@ -47,17 +47,6 @@ EOF
 sudo echo "127.0.0.1 $(hostname)" | sudo tee --append /etc/hosts
 sudo service dnsmasq restart
 
-#######################################
-# START SERVICES
-#######################################
-sudo systemctl daemon-reload
-sudo systemctl enable nomad.service
-sudo systemctl start nomad
-
-
-#sudo yum install -y java-1.8.0-openjdk
-## Download and unpack spark
-
 sudo wget -P /ops/examples/spark https://s3.amazonaws.com/nomad-spark/spark-2.1.0-bin-nomad.tgz
 sudo tar -xvf /ops/examples/spark/spark-2.1.0-bin-nomad.tgz --directory /ops/examples/spark
 sudo mv /ops/examples/spark/spark-2.1.0-bin-nomad /usr/local/bin/spark
