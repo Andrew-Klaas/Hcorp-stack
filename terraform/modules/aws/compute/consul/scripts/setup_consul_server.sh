@@ -42,7 +42,11 @@ fi
 
 sudo bash -c "cat >/etc/systemd/system/consul.d/consul.json" << EOF
 {
-        "acl_enforce_version_8": false
+        "acl_enforce_version_8": false,
+        "segments": [
+          {"name": "alpha", "bind": "${INSTANCE_PRIVATE_IP}", "advertise": "${INSTANCE_PRIVATE_IP}", "port": 8303},
+          {"name": "beta", "bind": "${INSTANCE_PRIVATE_IP}", "advertise": "${INSTANCE_PRIVATE_IP}", "port": 8304}
+  ]
 }
 EOF
 
