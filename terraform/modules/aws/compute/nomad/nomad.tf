@@ -161,7 +161,7 @@ resource "aws_security_group" "sg" {
   # Consul communication
   ingress {
     from_port   = 8300
-    to_port     = 8302
+    to_port     = 8304
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

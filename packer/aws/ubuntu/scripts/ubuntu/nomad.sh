@@ -1,8 +1,9 @@
 #!/bin/bash
 set -x
+set -v
 
 
-NOMAD_VERSION=0.6.0
+NOMAD_VERSION=0.7.0
 
 INSTANCE_PRIVATE_IP=$(/usr/sbin/ifconfig eth0 | grep "inet addr" | awk '{ print substr($2,6) }')
 
@@ -52,7 +53,8 @@ sudo chown -R root:root /usr/local/bin/spark
 echo "Fetching nomad..."
 cd /tmp/
 
-wget -q https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip -O nomad.zip
+#wget -q https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip -O nomad.zip
+wget -q https://releases.hashicorp.com/nomad/0.7.0-beta1/nomad_0.7.0-beta1_linux_amd64.zip -O nomad.zip
 
 echo "Installing nomad..."
 unzip nomad.zip

@@ -174,7 +174,7 @@ approle_setup() {
   curl -fX PUT 127.0.0.1:8500/v1/kv/service/vault/secret_id_accessor -d $(cat /tmp/secret_id_accessor)
 }
 
-totp_setup() {
+totp_setup()  {
   username=${USER}
   vault mount totp
   sudo tee /home/${username}/setup-totp-gen.sh > /dev/null <<EOF
@@ -208,7 +208,7 @@ if vault status | grep active > /dev/null; then
   policy_setup
   admin_setup
   pki_setup
-  totp_setup
+  #totp_setup
 
 fi
 sudo echo "test6" > /tmp/test6
