@@ -1,14 +1,17 @@
  #!/bin/bash
-set -x
+set -e
 set -v
+set -x
 
-sleep 60s
+echo "hi0" > /tmp/test0
 
-wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
-sudo chmod +x ./jq
-sudo cp jq /usr/bin
+sleep 30s
+
+echo "hi1" > /tmp/test
 
 username=${USER}
+
+echo "hi2" > /tmp/test
 
 echo "starting vault install"
 
