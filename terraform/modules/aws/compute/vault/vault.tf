@@ -82,6 +82,7 @@ resource "aws_instance" "vault-server" {
 
     provisioner "remote-exec" {
         inline = [
+            "sudo chmod -R 777 /tmp",
             "sudo chmod +x /tmp/setup_mysql_vault.sh",
             "sudo chmod +x /tmp/setup_vault.sh",
             "sudo /tmp/setup_vault.sh > /tmp/setup.log",

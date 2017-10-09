@@ -1,4 +1,4 @@
-job "app" {
+job "app2" {
   datacenters = ["dc1"]
   type = "service"
   update {
@@ -8,7 +8,7 @@ job "app" {
     auto_revert = false
     canary = 0
   }
-  group "app" {
+  group "app2" {
     count = 3
     restart {
       # The number of attempts to run the job within the specified interval.
@@ -22,12 +22,12 @@ job "app" {
     ephemeral_disk {
       size = 300
     }
-    task "app" {
+    task "app2" {
       # The "driver" parameter specifies the task driver that should be used to
       # run the task.
       driver = "docker"
       config {
-        image = "aklaas2/test-app"
+        image = "aklaas2/test-app2"
         port_map {
           http = 8080
         }
@@ -43,8 +43,8 @@ job "app" {
         }
       }
       service {
-        name = "app"
-        tags = [ "urlprefix-app/"]
+        name = "app2"
+        tags = [ "urlprefix-app2/"]
         port = "http"
         check {
           name     = "alive"

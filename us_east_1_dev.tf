@@ -105,7 +105,7 @@ module "compute" {
   private_key         = "${var.private_key}"
   consul_server_count = "${var.consul_server_count}"
   nomad_server_count  = "${var.nomad_server_count}"
-  nomad_client_count  = 4 //"${var.nomad_client_count}"
+  nomad_client_count  = "${var.nomad_client_count}"
   vault_server_count  = "${var.vault_server_count}"
 
   db_address = "${module.data.db_address}"
@@ -153,6 +153,10 @@ output "consul_server_addresses" {
 
 output "nomad_server_addresses" {
   value = "${module.compute.nomad_server_addresses}"
+}
+
+output "nomad_ui" {
+  value = "${module.compute.nomad_ui}"
 }
 
 output "nomad_client_addresses" {

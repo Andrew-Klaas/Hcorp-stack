@@ -261,9 +261,9 @@ output "nomad_client_addresses" {
   value = "${formatlist("ssh://%s", aws_instance.nomad-client.*.public_dns)}"
 }
 
-#output "consul_ui" {
-#  value = "http://${aws_instance.nomad-server.0.public_dns}:8500/ui/"
-#}
+output "nomad_ui" {
+  value = "http://${aws_instance.nomad-server.0.public_dns}:4646"
+}
 
 #output "primary_consul" {
 #  value = "${aws_instance.nomad-server.0.private_dns}"

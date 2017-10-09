@@ -29,7 +29,7 @@ module "vault" {
   vpc_id = "${var.vpc_id}"
   vault_server_count = "${var.vault_server_count}"
   consul_server_count = "${var.consul_server_count}"
-  primary_consul = "${module.consul.primary_consul}" 
+  primary_consul = "${module.consul.primary_consul}"
 
   db_address = "${var.db_address}"
   db_user    = "${var.db_user}"
@@ -60,7 +60,7 @@ module "nomad" {
   nomad_server_count = "${var.nomad_server_count}"
   nomad_client_count = "${var.nomad_client_count}"
   vpc_id = "${var.vpc_id}"
-  primary_consul = "${module.consul.primary_consul}" 
+  primary_consul = "${module.consul.primary_consul}"
   primary_vault  = "${module.vault.primary_vault}"
 
 }
@@ -87,6 +87,10 @@ output "nomad_client_addresses" {
 
 output "vault_ui" {
   value = "${module.vault.vault_ui}"
+}
+
+output "nomad_ui" {
+  value = "${module.nomad.nomad_ui}"
 }
 
 output "vault_server_addresses" {
