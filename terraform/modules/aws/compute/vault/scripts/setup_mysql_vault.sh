@@ -3,10 +3,13 @@ set -e
 set -v
 set -x
 #step 1:
+sleep 5s
+sudo echo 'mysqltest' /tmp/test.txt
 if [ -z "$1" ]; then
 	echo "No arg/endpoint specified!"
 	exit
 fi
+sudo echo 'mysqltest' /tmp/test.txt
 if vault status | grep active > /dev/null; then
 	sudo apt-get install -y mysql-client
 	export ROOT_TOKEN=$(consul kv get service/vault/root-token)

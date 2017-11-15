@@ -87,7 +87,8 @@ resource "aws_instance" "vault-server" {
             "sudo chmod +x /tmp/setup_vault.sh",
             "sudo /tmp/setup_vault.sh > /tmp/setup.log",
             "sudo echo 'hi' > /tmp/blah.txt",
-            "sudo /tmp/setup_mysql_vault.sh ${var.db_address} ${var.db_user} ${var.db_password} > /tmp/setup2.log"
+            "sudo /tmp/setup_mysql_vault.sh ${var.db_address} akuser akpassword",
+            "sudo echo 'bye' > /tmp/blah.txt"
         ]
     }
 }

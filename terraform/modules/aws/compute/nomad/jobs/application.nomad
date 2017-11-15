@@ -40,7 +40,7 @@ job "app" {
 
       service {
         name = "app"
-        tags = ["urlprefix-app.com/"]
+        tags = ["urlprefix/app"]
         port = "http"
         check {
           type = "http"

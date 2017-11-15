@@ -4,7 +4,7 @@ set -x
 
 echo "hi0" > /tmp/test0
 
-sleep 30s
+sleep 60s
 
 echo "hi1" > /tmp/test
 
@@ -49,8 +49,6 @@ else
   echo "Vault has already been initialized, skipping." > /tmp/test
 fi
 
-sleep 10s
-
 sudo echo "test3" > /tmp/test3
 
 echo "Unsealing Vault"
@@ -59,8 +57,6 @@ vault unseal $(cget unseal-key-2)
 vault unseal $(cget unseal-key-3)
 
 sudo echo "test4" > /tmp/test4
-
-sleep 10s
 
 echo "Vault setup complete."
 
@@ -190,6 +186,7 @@ EOF
   sudo chmod +x "/home/${username}/setup-totp-gen.sh"
 }
 
+sudo echo "test-blah" /tmp/test-blah
 if vault status | grep active > /dev/null; then
   # auth with root token
   #Create Nomad Vault Token for mysql
@@ -199,7 +196,7 @@ if vault status | grep active > /dev/null; then
   if [ ! $(cget nomad-token) ]; then
     sudo echo "test5" > /tmp/test5
     vault mount mysql
-    vault policy-write nomad-server ~/policy/nomad-server-policy.hcl
+    vault policy-write nomad-server /home/andrewklaas/policy/nomad-server-policy.hcl
     export NOMAD_TOKEN=$(vault token-create -policy nomad-server | grep 'token ' | awk '{print $2}')
     curl -fX PUT 127.0.0.1:8500/v1/kv/service/vault/nomad-token -d $NOMAD_TOKEN
     sudo echo $NOMAD_TOKEN > /tmp/test5
